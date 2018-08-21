@@ -111,10 +111,11 @@ key3: value3
 # combinations of lists and maps:
 
 # hyphenated list of unbracketed maps
-- bob: 4
+- bob: 4        # first key/value pair may be on the same line as the hyphen; the remaining key/value pairs must be indented one level greater than the hyphen
   joe: 6
   roy: 1
-- eva: 6
+-               # first key-value pair may be on the line immediately following the hyphen, indented one level greater than the hyphen
+  eva: 6
   jane: 1
   amy: 7
 
@@ -164,21 +165,50 @@ girls: [
   amy
 ]
 
-# bracketed map of hyphenated lists - I might make this invalid
-{
-  boys:
-    - bob
-    - joe
-    - roy,
-  girls:
-    - eva
-    - jane
-    - amy
-}
+# bracketed map of hyphenated lists is not allowed
 
 # bracketed map of bracketed lists
 {boys: [bob, joe, roy],
  girls: [eva,
          jane,
          amy]}
+
+
+# nested lists
+
+# unbracketed list of unbracketed lists
+-
+  - bob
+  - joe
+  - roy
+-
+  - eva
+  - jane
+  - amy
+
+# unbracketed list of bracketed lists
+- [bob, joe, roy]
+- [eva,
+   jane,
+   amy,]
+
+# bracketed list of unbracketed lists
+[
+  - bob
+  - joe
+  - roy,
+
+  - eva
+  - jane
+  - amy
+]
+
+# bracketed list of bracketed lists
+[ [bob, joe, roy],
+  [eva, jane, amy] ]
+
+
+# nested maps
+
+
 ```

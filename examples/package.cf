@@ -1,9 +1,9 @@
 name: "confefe"
 version: "1.2.0"
 tags:
-- "foo"
-- "bar"
-- "baz"
+  - "foo"
+  - "bar"
+  - "baz"
 authors: ["Bill", "Bob"]
 
 dependencies: [             # dependencies captured in a nested array
