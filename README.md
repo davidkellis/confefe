@@ -29,13 +29,13 @@ Indentation style must be consistent across the entire configuration file, and m
 # comments are denoted with a leading hash symbol, followed by anything, followed by a newline
 
 # nil may be supplied in place of any other value
-nil    # nil is the only value of the Nil type
+nil
 
-# true and false are the only values of the Bool type
+# boolean values
 true
 false
 
-# integer values are represented by the Int type
+# integer values have arbitrary precision
 -119419487192791019287401948710294871
 -10
 0
