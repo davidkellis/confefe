@@ -22,6 +22,9 @@ Indentation style must be consistent across the entire configuration file, and m
 - 4 spaces
 - tabs
 
+
+## Example
+
 ```
 # comments are denoted with a leading hash symbol, followed by anything, followed by a newline
 
