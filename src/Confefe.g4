@@ -24,37 +24,77 @@ tokens { INDENT, DEDENT }
 
 
 file
-  : keyValuePairs EOF   # TopLevelMap
-  | listItems EOF       # TopLevelList
+  : topLevelMap EOF   # FileTopLevelMap
+  | topLevelList EOF  # FileTopLevelList
   ;
 
-keyValuePairs
-  : keyValuePair
+topLevelMap
+  : unbracketedMap
+  | bracketedMap
   ;
 
-keyValuePair: key WS COLON WS value;
+unbracketedMap
+  : unbracketedKeyValuePair+
+  ;
+
+unbracketedKeyValuePair
+  : key LWS? COLON LWS? simpleValue LWS? NL        # UnbracketedKeyValuePairInline
+  | key LWS? COLON LWS? INDENT value LWS? DEDENT   # UnbracketedKeyValuePairIndented
+  ;
+
+bracketedMap
+  : LBRACE WS? commaDelimitedKeyValuePairs? WS? RBRACE
+  ;
+
+commaDelimitedKeyValuePairs
+  : (commaDelimitedKeyValuePair WS? COMMA WS?)* commaDelimitedKeyValuePair WS? COMMA?
+  ;
+
+commaDelimitedKeyValuePair
+  : key WS? COLON WS? simpleValue
+  ;
+
+topLevelList
+  : unbracketedList
+  | bracketedList
+  ;
+
+unbracketedList
+  : unbracketedListItem+
+  ;
+
+unbracketedListItem
+  : HYPHEN LWS? simpleValue LHS? NL
+  ;
+
+bracketedList
+  :
+  ;
 
 key: primitive;
 
 map
-  : LBRACE WS keyValuePairs WS RBRACE
-  | 
-  ;
-
-listItems
-  :
+  : unbracketedMap
+  | bracketedMap
   ;
 
 list
-  :
+  : unbracketedList
+  | bracketedList
   ;
 
 primitive
-  : NIL
+  : nil
   | bool
-  | int_literal
-  | float_literal
+  | intLiteral
+  | decimalLiteral
   | STRING_LITERAL
+  ;
+
+simpleValue
+  : primitive
+  | bracketedMap
+  | bracketedList
   ;
 
 value
@@ -63,13 +103,19 @@ value
   | map
   ;
 
+nil: NIL | NULL;
+
 bool: TRUE | FALSE;
 
-int_literal: DECIMAL_DIGIT+;
+intLiteral
+  : '+'? DECIMAL_DIGIT+
+  | '-'? DECIMAL_DIGIT+
+  ;
 
-float_literal: DECIMAL_DIGIT+ DOT DECIMAL_DIGIT+;
+decimalLiteral: DECIMAL_DIGIT+ DOT DECIMAL_DIGIT+;
 
 NIL: 'nil';
+NULL: 'null';
 TRUE: 'true';
 FALSE: 'false';
 
@@ -105,7 +151,9 @@ UNICODE_CHAR: ~[\u000A];
 
 BACKSLASH: '\\';
 DOT: '.';
+COMMA: ',';
 COLON: ':';
+HYPHEN: '-';
 LBRACE: '{';
 RBRACE: '}';
 LBRACKET: '[';

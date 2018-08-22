@@ -3,7 +3,7 @@
 confefe, pronounced con-feef, is a simple configuration language
 
 confefe supports 8 different data types, plus comments:
-- nil
+- nil/null
 - bool
 - int
 - decimal
@@ -15,21 +15,23 @@ confefe supports 8 different data types, plus comments:
 
 confefe file extension is `.cf`
 
-**Note: Indentation levels are significant in the notation of unbracketed maps and hyphenated/unbracketed lists.**
+The top-level element of a confefe file must be either a list or a map.
+
+**Note: Indentation levels are significant in the representation of unbracketed maps and unbracketed lists.**
 
 Indentation style must be consistent across the entire configuration file, and must be **one** of the following:
 - 2 spaces
 - 4 spaces
 - tabs
 
-
 ## Example
 
 ```
 # comments are denoted with a leading hash symbol, followed by anything, followed by a newline
 
-# nil may be supplied in place of any other value
+# nil/null may be supplied in place of any other value
 nil
+null
 
 # boolean values
 true
@@ -55,8 +57,7 @@ false
 .4      # 0.4
 0.1     # 0.1
 
-# strings are optionally double-quoted
-# strings must only be quoted when they would otherwise be interpreted as one of the other syntactic structures that confefe supports
+# strings are optionally double-quoted, but must be double-quoted when they would otherwise be interpreted as one of the other syntactic structures that confefe supports
 # strings may span multiple lines, but must be double quoted if they do
 foo
 foo bar baz
@@ -77,9 +78,11 @@ line string"
 @16:39:57-08:00
 
 
-# lists are denoted in one of two ways: (1) hyphenated/unbracketed, or (2) bracketed
+# lists are denoted in one of two ways: (1) unbracketed, or (2) bracketed
+# unbracketed lists may not be used within bracketed lists or bracketed maps
+# indentation within a bracketed list is not significant
 
-# hyphenated/bracketed list:
+# bracketed list:
 - dog
 - cat
 - cow
@@ -93,6 +96,8 @@ line string"
 
 
 # maps are denoted in one of two ways: (1) unbracketed, or (2) bracketed
+# unbracketed maps may not be used within bracketed lists or bracketed maps
+# indentation within a bracketed map is not significant
 
 # unbracketed map:
 key1: value1
@@ -110,7 +115,7 @@ key3: value3
 
 # combinations of lists and maps:
 
-# hyphenated list of unbracketed maps
+# unbracketed list of unbracketed maps
 - bob: 4        # first key/value pair may be on the same line as the hyphen; the remaining key/value pairs must be indented one level greater than the hyphen
   joe: 6
   roy: 1
@@ -119,7 +124,7 @@ key3: value3
   jane: 1
   amy: 7
 
-# hyphenated list of bracketed maps
+# unbracketed list of bracketed maps
 - {bob: 4, joe: 6, roy: 1}
 - {
     eva: 6,
@@ -127,15 +132,7 @@ key3: value3
     amy: 7
   }
 
-# bracketed list of unbracketed maps
-[
-  bob: 4
-  joe: 6
-  roy: 1,
-  eva: 6
-  jane: 1
-  amy: 7
-]
+# bracketed list of unbracketed maps is not allowed
 
 # bracketed list of bracketed maps
 [
@@ -147,7 +144,7 @@ key3: value3
   }
 ]
 
-# unbracketed map of hyphenated lists
+# unbracketed map of unbracketed lists
 boys:
   - bob
   - joe
@@ -165,7 +162,7 @@ girls: [
   amy
 ]
 
-# bracketed map of hyphenated lists is not allowed
+# bracketed map of unbracketed lists is not allowed
 
 # bracketed map of bracketed lists
 {boys: [bob, joe, roy],
@@ -192,16 +189,7 @@ girls: [
    jane,
    amy,]
 
-# bracketed list of unbracketed lists
-[
-  - bob
-  - joe
-  - roy,
-
-  - eva
-  - jane
-  - amy
-]
+# bracketed list of unbracketed lists is not allowed
 
 # bracketed list of bracketed lists
 [ [bob, joe, roy],
@@ -210,5 +198,34 @@ girls: [
 
 # nested maps
 
+# unbracketed map of unbracketed maps
+boys:
+  bob: 4
+  joe: 6
+  roy: 1
+girls:
+  eva: 6
+  jane: 1
+  amy: 7
 
+# unbracketed map of bracketed maps
+boys: {
+  bob: 4,
+  joe: 6,
+  roy: 1
+}
+girls:
+  {eva: 6, jane: 1, amy: 7}
+
+# bracketed map of unbracketed maps is not allowed
+
+# bracketed map of bracketed maps
+{
+  boys: {
+    bob: 4,
+    joe: 6,
+    roy: 1
+  },
+  girls: {eva: 6, jane: 1, amy: 7}
+}
 ```
