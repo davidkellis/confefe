@@ -24,7 +24,9 @@ class Confefe
       lexer = ConfefeLexer.new(input)                 # create a buffer of tokens pulled from the lexer
       tokens = CommonTokenStream.new(lexer)           # create a parser that feeds off the tokens buffer
       parser = ConfefeParser.new(tokens)
+      puts "parsing..."
       tree = parser.file()                            # begin parsing at the start rule
+      puts "parse tree:"
       puts tree.toStringTree(parser)                  # print LISP-style tree
     end
   end
@@ -32,7 +34,8 @@ end
 
 def main
   names = Confefe.parse_file("examples/names_list.cf")
+  puts "names:"
   puts names.inspect
 end
 
-main
+main if __FILE__ == $0

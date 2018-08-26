@@ -40,6 +40,7 @@ unbracketedMap
 unbracketedKeyValuePair
   : key LWS? COLON LWS? simpleValue LWS? NL        # UnbracketedKeyValuePairInline
   | key LWS? COLON LWS? INDENT value LWS? DEDENT   # UnbracketedKeyValuePairIndented
+  // add another alternative that includes the first element of a map followed by the indented remaining map elements
   ;
 
 bracketedMap
@@ -64,14 +65,24 @@ unbracketedList
   ;
 
 unbracketedListItem
-  : HYPHEN LWS? simpleValue LHS? NL
+  : HYPHEN LWS? simpleValue LWS? NL
+  | HYPHEN LWS? INDENT value LWS? DEDENT
+  // add another alternative that includes the first element of a map followed by the indented remaining map elements
   ;
 
 bracketedList
-  :
+  : LBRACKET WS? commaDelimitedListItems WS? RBRACKET
   ;
 
-key: primitive;
+commaDelimitedListItems
+  : (commaDelimitedListItem WS? COMMA WS?)* commaDelimitedListItem WS? COMMA?
+  ;
+
+commaDelimitedListItem
+  : simpleValue
+  ;
+
+key: simpleValue;
 
 map
   : unbracketedMap
@@ -89,6 +100,7 @@ primitive
   | intLiteral
   | decimalLiteral
   | STRING_LITERAL
+  | unquotedStringLiteral
   ;
 
 simpleValue
@@ -113,6 +125,10 @@ intLiteral
   ;
 
 decimalLiteral: DECIMAL_DIGIT+ DOT DECIMAL_DIGIT+;
+
+unquotedStringLiteral
+  : UNICODE_VALUE
+  ;
 
 NIL: 'nil';
 NULL: 'null';

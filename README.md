@@ -119,7 +119,7 @@ key3: value3
 - bob: 4        # first key/value pair may be on the same line as the hyphen; the remaining key/value pairs must be indented one level greater than the hyphen
   joe: 6
   roy: 1
--               # first key-value pair may be on the line immediately following the hyphen, indented one level greater than the hyphen
+-               # alternatively, first key-value pair may be on the line immediately following the hyphen, indented one level greater than the hyphen
   eva: 6
   jane: 1
   amy: 7
@@ -174,11 +174,10 @@ girls: [
 # nested lists
 
 # unbracketed list of unbracketed lists
--
-  - bob
+- - bob       # first item of nested list may be on the same line as the hypen of the containing list; the remaining items must be indented one level 
   - joe
   - roy
--
+-             # alternatively, first item of nested list may be on the line immediately following the hyphen of the containing list, indented one level greater than the containing list
   - eva
   - jane
   - amy
